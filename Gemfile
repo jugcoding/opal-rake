@@ -16,3 +16,4 @@ rake_version = ENV['RAKE_VERSION']
 
 gem 'rack', rack_version if rack_version
 gem 'rake', rake_version if rake_version
+gem 'rainbow'

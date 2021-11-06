@@ -26,9 +26,10 @@ Gem::Specification.new do |spec|
   spec.executables = files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'rake', "~> 4.0"
+  spec.add_dependency 'rake', ">= 4.0"
   spec.add_dependency 'opal', [">= 1.0", "< 2.0"]
   spec.add_dependency 'tilt', '>= 1.4'
+  spec.add_dependency 'rainbow'
 
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec'

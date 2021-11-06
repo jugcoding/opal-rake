@@ -1,4 +1,4 @@
-require_relative 'lib/opal/rake/version'
+require 'opal/rake/version'
 
 Gem::Specification.new do |spec|
   spec.name         = 'opal-rake'

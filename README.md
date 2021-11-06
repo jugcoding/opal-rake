@@ -11,7 +11,7 @@ gem "opal-rake"
 ```
 
 ## Usage
-To be written
+To be written.
 
 ## License
 

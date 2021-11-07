@@ -30,8 +30,8 @@ module Opal
         Rake.config.merge(config)
       end
 
-      def dist(config)
-        Rake.dist = config
+      def paths(config)
+        Rake.paths = config
       end
 
       def npm_dev(package)

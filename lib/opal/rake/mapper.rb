@@ -31,7 +31,7 @@ module Opal
         @src = source
         @opts = opts(opts || {})
 
-        @opts[:dst_path] = Rake.dist[@opts[:out]]
+        @opts[:dst_path] = Rake.paths[@opts[:out]]
         @dst = [@opts[:dst_path], @opts[:dst_filename]].join('/')
 
         run

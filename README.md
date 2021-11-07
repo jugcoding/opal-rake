@@ -12,9 +12,10 @@ gem "opal-rake"
 
 ## Usage
 
-Rakefile example : [Rakefile](https://github.com/jugcoding/raked-inesita/blob/master/Rakefile)
+Commented Rakefile example : [Rakefile](https://github.com/jugcoding/raked-inesita/blob/master/Rakefile)
 Full WebApp example : [raked-inesita](https://github.com/jugcoding/raked-inesita)
 
+I recommand to directly examine the source here.
 
 ## License
 

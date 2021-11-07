@@ -7,7 +7,7 @@ module Opal
     class << self
       include ::Rake::DSL
 
-      attr_reader :config, :dist, :mappers, :targets
+      attr_reader :config, :paths, :mappers, :targets
 
       def initialize
         @mappers = {}
@@ -28,28 +28,23 @@ module Opal
         install_tasks
       end
 
-      def dist=(config)
-        @dist = config
-        @dist.each do |key, value|
-          next if key == :root
-
-          @dist[key] = "#{@dist[:root]}/#{value}"
-        end
+      def paths=(config)
+        @paths = config
       end
 
-      def mkdir_dist
-        @dist.each_value { |dir| FileUtils.mkdir_p dir }
+      def mkdir_paths
+        @paths.each_value { |dir| FileUtils.mkdir_p dir }
       end
 
       def install_tasks
-        @targets[:setup].push(:mkdir_dist, :compile)
+        @targets[:setup].push(:mkdir_paths, :compile)
 
         @targets.each do |name, dependencies|
           task name => dependencies
         end
 
         task(:reset) { reset_setup }
-        task(:mkdir_dist) { mkdir_dist }
+        task(:mkdir_paths) { mkdir_paths }
       end
 
       def run_server
@@ -57,7 +52,7 @@ module Opal
       end
 
       def reset_setup
-        sh "rm -rI #{dist[:root]}" if File.exist? dist[:root]
+        sh "rm -rI #{paths[:root]}" if File.exist? paths[:root]
         sh 'rm -rI ./node_modules' if File.exist? './node_modules'
 
         ::Rake::Task[:setup].invoke

@@ -3,18 +3,17 @@
 module Opal
   module Rake
     class Mapper
-      class Browserify < Mapper
+      class Link < Mapper
         def opts(user_opt)
           {
-            out: :js,
+            out: :root,
             dst_filename: File.basename(@src),
           }.merge(user_opt)
         end
 
-        CMD = './node_modules/.bin/browserify'
         def run
           add_rule do
-            system "#{CMD} #{@src} -o #{@dst}"
+            sh "ln -rs #{@src} #{@dst}"
           end
         end
       end

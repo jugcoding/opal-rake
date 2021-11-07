@@ -4,14 +4,31 @@ module Opal
   module Rake
     class Mapper
       class Opal < Mapper
-        def run(source, out_path = :js)
-          @src = source
-          @dst = "#{Rake.dist[out_path]}/#{basename(source, '.rb', '.js')}"
-          add_rule do
+        def opts(user_opt)
+          {
+            single: false,
+            out: :js,
+            dst_filename: "#{File.basename(@src, '.rb')}.js",
+          }.merge(user_opt)
+        end
+
+        def run
+          @app_folder = File.dirname(@src)
+          add_file(dependencies) do
             builder = ::Opal::Builder.new
-            builder.append_paths('.', './app')
+            builder.append_paths('.', @app_folder)
             build = builder.build(@src, source_map_enabled: false)
             File.binwrite(@dst, build.to_s)
+          end
+        end
+
+        protected
+
+        def dependencies
+          if @opts[:single]
+            @src
+          else
+            Dir["#{@app_folder}/**/*.rb"]
           end
         end
       end

@@ -7,7 +7,7 @@ module Opal
     class << self
       include ::Rake::DSL
 
-      attr_reader :dist, :mappers, :targets
+      attr_reader :config, :dist, :mappers, :targets
 
       def initialize
         @mappers = {}
@@ -46,17 +46,18 @@ module Opal
           task name => dependencies
         end
 
-        task(:cleanup) { cleanup }
+        task(:reset) { reset_setup }
+        task(:setup) { reset_setup }
         task(:server) { run_server }
       end
 
       def run_server
-        sh 'bundle exec foreman start'
+        sh 'bundle exec foreman start -f Procfile.dev'
       end
 
-      def cleanup
-        sh "rm -rI #{dist[:root]}"
-        sh 'rm -rI ./node_modules'
+      def reset_setup
+        sh "rm -rI #{dist[:root]}" if File.exist? dist[:root]
+        sh 'rm -rI ./node_modules' if File.exist? './node_modules'
 
         mkdir_dist
         ::Rake::Task[:setup].invoke

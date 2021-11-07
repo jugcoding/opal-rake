@@ -6,7 +6,9 @@ module Opal
       module_function
 
       def config=(config)
-        config.each { |params| Rake.mappers[params[0]].run(*params[1..]) }
+        config.each do |p|
+          Rake.mappers[p[0]].new(p[0], p[1], p[2])
+        end
       end
     end
   end

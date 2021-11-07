@@ -10,9 +10,12 @@ module Opal
       class << self
         def initialize
           @subclasses.each do |klass|
-            singleton = klass.new
-            Rake.mappers[singleton.key] = singleton
+            Rake.mappers[key(klass)] = klass
           end
+        end
+
+        def key(klass)
+          klass.name.split('::').last.downcase.to_sym
         end
 
         def inherited(subclass)
@@ -23,12 +26,15 @@ module Opal
         end
       end
 
-      def key
-        self.class.name.split('::').last.downcase.to_sym
-      end
+      def initialize(key, source, opts)
+        @key = key
+        @src = source
+        @opts = opts(opts || {})
 
-      def run(_params, _output_folder)
-        raise 'not implemented'
+        @opts[:dst_path] = Rake.dist[@opts[:out]]
+        @dst = [@opts[:dst_path], @opts[:dst_filename]].join('/')
+
+        run
       end
 
       protected
@@ -37,11 +43,23 @@ module Opal
         Rake.targets[:compile] << @dst
 
         rule @dst => @src do
-          log
-          compiler.call
-          optimize
-          register_asset
+          compile(&compiler)
         end
+      end
+
+      def add_file(deps, &compiler)
+        Rake.targets[:compile] << @dst
+
+        file @dst => deps do
+          compile(&compiler)
+        end
+      end
+
+      def compile(&compiler)
+        log
+        compiler.call
+        optimize
+        register_asset
       end
 
       def log
@@ -51,10 +69,6 @@ module Opal
       def optimize; end
 
       def register_asset; end
-
-      def basename(filename, ext = '', new_ext = nil)
-        "#{File.basename(filename, ext)}#{new_ext}"
-      end
     end
   end
 end

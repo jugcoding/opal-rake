@@ -4,9 +4,14 @@ module Opal
   module Rake
     class Mapper
       class Sass < Mapper
-        def run(source, out_path = :css)
-          @src = source
-          @dst = "#{Rake.dist[out_path]}/#{basename(source, '.sass')}"
+        def opts(user_opt)
+          {
+            out: :css,
+            dst_filename: File.basename(@src, '.sass'),
+          }.merge(user_opt)
+        end
+
+        def run
           add_rule do
             sass = File.read(@src)
             css = SassC::Engine.new(sass, syntax: :sass, style: :compressed).render

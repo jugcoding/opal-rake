@@ -26,6 +26,10 @@ module Opal
         names.each { |f| FileUtils.mkdir_p f }
       end
 
+      def config(config)
+        Rake.config.merge(config)
+      end
+
       def dist(config)
         Rake.dist = config
       end

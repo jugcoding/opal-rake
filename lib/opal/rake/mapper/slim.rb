@@ -4,9 +4,14 @@ module Opal
   module Rake
     class Mapper
       class Slim < Mapper
-        def run(source, out_path)
-          @src = source
-          @dst = "#{Rake.dist[out_path]}/#{basename(source, '.slim')}"
+        def opts(user_opt)
+          {
+            out: :root,
+            dst_filename: File.basename(@src, '.slim'),
+          }.merge(user_opt)
+        end
+
+        def run
           add_rule do
             File.binwrite(@dst, ::Slim::Template.new(@src).render)
           end

@@ -11,7 +11,10 @@ gem "opal-rake"
 ```
 
 ## Usage
-To be written.
+
+Rakefile example : [Rakefile](https://github.com/jugcoding/raked-inesita/blob/master/Rakefile)
+Full WebApp example : [raked-inesita](https://github.com/jugcoding/raked-inesita)
+
 
 ## License
 

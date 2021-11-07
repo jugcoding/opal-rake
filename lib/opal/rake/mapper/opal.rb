@@ -17,7 +17,7 @@ module Opal
           add_file(dependencies) do
             builder = ::Opal::Builder.new
             builder.append_paths('.', @app_folder)
-            build = builder.build(@src, source_map_enabled: false)
+            build = builder.build(@src, source_map_enabled: true)
             File.binwrite(@dst, build.to_s)
           end
         end

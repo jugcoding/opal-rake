@@ -42,13 +42,14 @@ module Opal
       end
 
       def install_tasks
+        @targets[:setup].push(:mkdir_dist, :compile)
+
         @targets.each do |name, dependencies|
           task name => dependencies
         end
 
         task(:reset) { reset_setup }
-        task(:setup) { reset_setup }
-        task(:server) { run_server }
+        task(:mkdir_dist) { mkdir_dist }
       end
 
       def run_server
@@ -59,9 +60,7 @@ module Opal
         sh "rm -rI #{dist[:root]}" if File.exist? dist[:root]
         sh 'rm -rI ./node_modules' if File.exist? './node_modules'
 
-        mkdir_dist
         ::Rake::Task[:setup].invoke
-        ::Rake::Task[:compile].invoke
       end
 
       def sh(cmd)

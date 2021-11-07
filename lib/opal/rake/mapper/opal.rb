@@ -18,7 +18,10 @@ module Opal
             builder = ::Opal::Builder.new
             builder.append_paths('.', @app_folder)
             build = builder.build(@src, source_map_enabled: true)
-            File.binwrite(@dst, build.to_s)
+            File.open(@dst, 'wb') do |f|
+              f.puts build.to_s
+              f.puts build.source_map.to_data_uri_comment
+            end
           end
         end
 

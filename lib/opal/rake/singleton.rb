@@ -43,7 +43,8 @@ module Opal
           task name => dependencies
         end
 
-        task(:reset) { reset_setup }
+        task(:reset) { reset }
+        task(:full_reset) { full_reset }
         task(:mkdir_paths) { mkdir_paths }
       end
 
@@ -51,11 +52,18 @@ module Opal
         sh 'bundle exec foreman start -f Procfile.dev'
       end
 
-      def reset_setup
+      def full_reset
         sh "rm -rI #{paths[:root]}" if File.exist? paths[:root]
         sh 'rm -rI ./node_modules' if File.exist? './node_modules'
 
         ::Rake::Task[:setup].invoke
+      end
+
+      def reset
+        sh "rm -rI #{paths[:root]}" if File.exist? paths[:root]
+
+        ::Rake::Task[:mkdir_paths].invoke
+        ::Rake::Task[:compile].invoke
       end
 
       def sh(cmd)
